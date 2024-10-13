@@ -2,8 +2,8 @@ import requests
 import json
 from urllib.parse import quote
 
-# Bark推送API的URL
-BARK_API_URL = "自己的api"
+# Bark推送API的device_key
+device_key ='自己的device_key'
 ICON_URL = 'https://www.iyunying.org/wp-content/uploads/2018/03/yunying-1520024936.jpeg'
 
 # 从output.json读取数据
@@ -15,7 +15,7 @@ def read_json_file(file_path: str):
 # 通过Bark推送通知
 def send_bark_notification(title: str, body: str, url: str):    
     # 拼接完整的Bark推送URL
-    send_url = f"{BARK_API_URL}/{title}/{body} ?url={url}&icon={ICON_URL}"
+    send_url = f"https://api.day.app/{device_key}/{title}/{body} ?url={url}&icon={ICON_URL}"
     response = requests.get(send_url)
     print(send_url)
     # 检查请求结果
@@ -35,17 +35,14 @@ def main():
             title = "什么值得买好价"
             rating_unworthy_num = int(item.get('rating_unworthy_num'))
             rating_worthy_num = int(item.get('rating_worthy_num'))
-
-            if rating_worthy_num > 0 : 
-                rate = float( rating_worthy_num / (rating_worthy_num + rating_unworthy_num) * 100)
-                discount = item.get('discount')
-                panelTitle =int(item.get('panelTitle'))
-                #要求点值率大于60,有优惠,且有评论
-                if rate > 60 and discount !='' and panelTitle >= 0:
-                    body = f"物品：{item.get('title', '无内容')}\n价格：{item.get('price', '无价格')}\n优惠：{item.get('discount', '无优惠')}\n点值率：{rate:.2f}%"
-                    url = item.get('url')
-                    # 发送推送通知
-                    send_bark_notification(title, body, url)
+            discount = item.get('discount')
+            panelTitle =int(item.get('panelTitle'))
+            if discount!='' and panelTitle>0:
+                body = f"物品：{item.get('title', '无内容')}\n价格：{item.get('price', '无价格')}\n优惠：{item.get('discount', '无优惠')}"
+                url = item.get('url')
+                # 发送推送通知
+                print("发送推送")
+                send_bark_notification(title, body, url)
     else:
         print("output.json的格式不正确或内容为空")
 
