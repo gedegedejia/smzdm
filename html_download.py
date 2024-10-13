@@ -12,3 +12,7 @@ def html_save():
     html_content = response.text
     with open('test.html', 'w', encoding='utf-8') as file:
         file.write(html_content)
+        
+
+if __name__ == '__main__':
+    html_save()
