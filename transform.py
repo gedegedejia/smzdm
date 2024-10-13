@@ -37,6 +37,7 @@ def main():
             rating_worthy_num = int(item.get('rating_worthy_num'))
             discount = item.get('discount')
             panelTitle =int(item.get('panelTitle'))
+            #要求有评论且有优惠信息
             if discount!='' and panelTitle>0:
                 body = f"物品：{item.get('title', '无内容')}\n价格：{item.get('price', '无价格')}\n优惠：{item.get('discount', '无优惠')}"
                 url = item.get('url')
